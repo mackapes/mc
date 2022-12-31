@@ -1,0 +1,33 @@
+From 6f8e445fb94e8a5e01bd99148f8543e428022a59 Mon Sep 17 00:00:00 2001
+From: DerFlash <bte@freenet.de>
+Date: Tue, 9 Jul 2013 00:11:12 +0200
+Subject: [PATCH] Save ticks lived to nbttag
+
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index d5900d28f..e748516e3 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -1787,6 +1787,7 @@ public abstract class Entity implements INamableTileEntity, EntityAccess, IComma
+             if (maxAirTicks != getDefaultMaxAirSupply()) {
+                 nbttagcompound.putInt("Bukkit.MaxAirSupply", getMaxAirSupply());
+             }
++            nbttagcompound.putInt("Spigot.ticksLived", this.tickCount);
+             // CraftBukkit end
+             IChatBaseComponent ichatbasecomponent = this.getCustomName();
+ 
+@@ -1945,6 +1946,11 @@ public abstract class Entity implements INamableTileEntity, EntityAccess, IComma
+             }
+ 
+             // CraftBukkit start
++            // Spigot start
++            if (this instanceof EntityLiving) {
++                this.tickCount = nbttagcompound.getInt("Spigot.ticksLived");
++            }
++            // Spigot end
+             this.persist = !nbttagcompound.contains("Bukkit.persist") || nbttagcompound.getBoolean("Bukkit.persist");
+             // SPIGOT-6907: re-implement LivingEntity#setMaximumAir()
+             if (nbttagcompound.contains("Bukkit.MaxAirSupply")) {
+-- 
+2.34.1
+
